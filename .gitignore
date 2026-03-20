@@ -7,20 +7,20 @@ artifacts/
 cache/
 frontend/dist/
 
-# Environment & sensitive files
-.env
-.env.local
+# Generated on deploy — do NOT commit
+frontend/src/contractAddress.js
+frontend/src/ABI.json
 deployed_address.txt
 
-# Hardhat
-typechain/
-typechain-types/
+# Secrets
+.env
 
-# Logs
+# Logs & temp
 *.log
+out.txt
 npm-debug.log*
 
-# OS files
+# OS
 .DS_Store
 Thumbs.db
 

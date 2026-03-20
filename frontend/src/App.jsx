@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { BrowserProvider, JsonRpcProvider, Contract } from "ethers";
-import Artifact from "./ABI.json";
+import ContractABI from "./ABI.json";
 import { CONTRACT_ADDRESS } from "./contractAddress";
 import "./index.css";
-
-const ContractABI = Artifact.abi ? Artifact.abi : Artifact;
 
 function App() {
   const [account, setAccount] = useState(null);
