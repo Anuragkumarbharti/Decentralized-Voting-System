@@ -26,15 +26,18 @@
 - [Features](#-features)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
+- [Quick Start](#-quick-start)
 - [Getting Started](#-getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Environment Setup](#environment-setup)
   - [Compile & Deploy](#compile--deploy)
   - [Run the Frontend](#run-the-frontend)
-- [Admin Guide](#-admin-guide)
-- [Voter Guide](#-voter-guide)
+- [Usage Guide](#-usage-guide)
+  - [Admin Dashboard](#admin-dashboard)
+  - [Voter Workflow](#voter-workflow)
 - [Smart Contract Reference](#-smart-contract-reference)
+- [Troubleshooting](#-troubleshooting)
 - [Screenshots](#-screenshots)
 - [Contributing](#-contributing)
 - [Author](#-author)
@@ -88,24 +91,27 @@ Built as a real-world demonstration of Web3 technology, this project combines a 
 ## ✨ Features
 
 ### 🔐 For Admins
-- ✅ Deploy a fresh election contract in seconds
-- ✅ Add unlimited candidates before the election starts
-- ✅ Start and end the election with a single click
-- ✅ Restart the election after it concludes (with a new session ID)
-- ✅ Admin-only dashboard hidden from regular users
+- ✅ **One-Click Deployment** — Deploy a fresh election contract in seconds with automated funding
+- ✅ **Unlimited Candidates** — Add as many candidates as needed before the election starts
+- ✅ **Election Control** — Start and end elections with a single click
+- ✅ **Election Restart** — Reset elections with a new session ID to prevent vote reuse
+- ✅ **Secure Admin Panel** — Admin-only dashboard hidden from regular users, identified automatically by wallet
+- ✅ **Real-Time Monitoring** — Watch vote counts update as voters cast their ballots
 
 ### 🗳️ For Voters
-- ✅ Connect with any MetaMask wallet — no signup needed
-- ✅ See live candidates and vote counts without logging in
-- ✅ Cast one vote per election per wallet address
-- ✅ Voting is blocked after the election ends
-- ✅ See the winner announced automatically after conclusion
+- ✅ **Zero Setup** — Connect with any MetaMask wallet — no signup or registration needed
+- ✅ **Public Transparency** — See live candidates and vote counts without logging in or connecting
+- ✅ **One Vote Per Election** — Cast exactly one vote per wallet per election round
+- ✅ **Election State Awareness** — Clear UI shows Live / Not Started / Concluded status
+- ✅ **Blockchain-Backed** — Your vote is immutable and verifiable on the blockchain forever
+- ✅ **Auto-Winner Announcement** — Winner is calculated and announced automatically when election ends
 
 ### 🌐 For Everyone
-- ✅ Public contract data loads on page visit — no wallet required to *view*
-- ✅ Fully responsive UI — works on mobile, tablet, and desktop
-- ✅ Real-time status: Live / Not Started / Concluded
-- ✅ Transparent results verifiable by anyone on the blockchain
+- ✅ **Fully Transparent** — All contract data is public and verifiable on-chain
+- ✅ **Responsive Design** — Works seamlessly on mobile, tablet, and desktop
+- ✅ **No Dependencies to View** — Public data loads immediately — no wallet or blockchain knowledge required
+- ✅ **Glassmorphism UI** — Modern dark-mode design with smooth interactions
+- ✅ **Gas-Efficient** — Optimized smart contract reduces transaction costs
 
 ---
 
@@ -113,13 +119,13 @@ Built as a real-world demonstration of Web3 technology, this project combines a 
 
 | Layer | Technology | Purpose |
 |---|---|---|
-| Smart Contract | **Solidity 0.8.28** | On-chain election logic |
-| Local Blockchain | **Ganache** | Local Ethereum node for development |
-| Contract Framework | **Hardhat 3** | Compile, test, deploy contracts |
-| Frontend Library | **React 19 + Vite** | Fast, modern UI |
-| Web3 Library | **Ethers.js v6** | Blockchain interaction from browser |
-| Wallet | **MetaMask** | User authentication + transaction signing |
-| Styling | **Vanilla CSS** | Glassmorphism dark-mode design |
+| Smart Contract | **Solidity 0.8.28** | On-chain election logic with secure state management |
+| Local Blockchain | **Hardhat** | Local Ethereum node for development & testing |
+| Contract Framework | **Hardhat 3** | Compile, test, and deploy contracts with ease |
+| Frontend Library | **React 19 + Vite** | Fast, modern UI with hot-reload development |
+| Web3 Library | **Ethers.js v6** | Type-safe blockchain interaction from browser |
+| Wallet | **MetaMask** | User authentication, transaction signing & fund management |
+| Styling | **Vanilla CSS** | Glassmorphism dark-mode design with responsive layout |
 
 ---
 
@@ -153,7 +159,33 @@ Decentralized-Voting-System/
 
 ---
 
-## 🚀 Getting Started
+## ⚡ Quick Start
+
+**Got 2 minutes?** Here's the fastest way to get voting:
+
+```bash
+# 1. Clone and install
+git clone https://github.com/Anuragkumarbharti/Decentralized-Voting-System.git
+cd Decentralized-Voting-System
+npm run setup
+
+# 2. Start the local blockchain
+npm run node
+
+# (In another terminal)
+# 3. Deploy the contract
+npm run deploy
+
+# 4. Start the frontend (in another terminal)
+npm run frontend
+```
+
+Then:
+- Open **http://localhost:5173** in your browser
+- Connect MetaMask to `http://127.0.0.1:8546` (Chain ID: 31337)
+- The first connected wallet becomes **Admin** — add candidates and start voting!
+
+---
 
 ### Prerequisites
 
@@ -162,9 +194,11 @@ Before you begin, make sure you have the following installed:
 | Tool | Version | Download |
 |---|---|---|
 | Node.js | v18 or higher | [nodejs.org](https://nodejs.org/) |
-| Ganache Desktop | Latest | [trufflesuite.com/ganache](https://trufflesuite.com/ganache/) |
 | MetaMask | Latest | [metamask.io](https://metamask.io/) (browser extension) |
 | Git | Any | [git-scm.com](https://git-scm.com/) |
+| npm or yarn | Latest | Comes with Node.js |
+
+> **Note:** Hardhat (the local blockchain) is installed automatically as an npm dependency. No manual setup needed!
 
 ---
 
@@ -186,39 +220,48 @@ npm run setup
 
 ### Environment Setup
 
-**Step 3 — Create your `.env` file**
+**Step 3 — Create your `.env` file (optional for local development)**
 ```bash
 cp .env.example .env
 ```
 
-Open `.env` and set your Ganache admin private key:
+For local Hardhat development, the `.env` file is optional. However, if you want to specify a custom admin private key, add it to `.env`:
+
 ```env
-PRIVATE_KEY=0xYOUR_GANACHE_ACCOUNT_PRIVATE_KEY_HERE
+PRIVATE_KEY=0xYOUR_HARDHAT_ACCOUNT_PRIVATE_KEY_HERE
 ```
 
-> **How to get your private key from Ganache:**
-> 1. Open Ganache Desktop and start a workspace.
-> 2. Click the 🔑 key icon next to any account.
-> 3. Copy the **Private Key** shown.
-> 4. Paste it into `.env` — this account becomes the **Admin**.
+> **Getting a private key for local development:**
+> When you run `npm run node`, Hardhat generates 20 test accounts with known private keys. Use any of them! Example:
+> ```
+> Account #0: 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
+> Private Key: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+> ```
 
-> ⚠️ **Security Warning:** Never share your private key. The `.env` file is listed in `.gitignore` and will **never** be pushed to GitHub.
+> ⚠️ **Security Warning:** Never use these test accounts on mainnet. Never share your private key. The `.env` file is listed in `.gitignore` and will **never** be pushed to GitHub.
 
 ---
 
 ### Compile & Deploy
 
-**Step 4 — Start Ganache**
-
-Open Ganache Desktop and make sure your workspace is running on:
-```
-RPC Server: http://127.0.0.1:7545
+**Step 4 — Start the Hardhat local blockchain**
+```bash
+npm run node
 ```
 
-**Step 5 — Compile the smart contract**
+You'll see output showing 20 test accounts with their private keys and a message:
+```
+Started HTTP and WebSocket JSON-RPC server at http://127.0.0.1:8546/
+```
+
+> This starts a local blockchain node that responds at `http://127.0.0.1:8546`. Keep this terminal running.
+
+**Step 5 — In a new terminal, compile the smart contract**
 ```bash
 npm run compile
 ```
+
+This generates the ABI and bytecode needed for deployment.
 
 **Step 6 — Deploy the contract**
 ```bash
@@ -226,14 +269,16 @@ npm run deploy
 ```
 
 This single command will:
-- Deploy `Voting.sol` to your local Ganache blockchain
+- Connect to your local Hardhat node
+- Deploy `Voting.sol` to the blockchain
 - Automatically write the contract address to `frontend/src/contractAddress.js`
-- Automatically write the trimmed ABI to `frontend/src/ABI.json`
+- Automatically write the ABI to `frontend/src/ABI.json`
 
 You'll see output like:
 ```
+💰 Auto-funded admin wallet with 100 ETH
 Deploying Voting contract...
-✅ Deployed to: 0xAbCd...1234
+✅ Deployed to: 0x5513F18ee5a5348bfc3B7d7E4f8876F17227A1b6
 📁 contractAddress.js and ABI.json updated in frontend/src/
 ```
 
@@ -246,99 +291,245 @@ Deploying Voting contract...
 npm run frontend
 ```
 
+You'll see output:
+```
+  VITE v8.0.1  ready in 2760 ms
+  ➜  Local:   http://localhost:5173/
+```
+
 Open your browser and visit: **http://localhost:5173**
 
+The website will load and connect to your local blockchain automatically! ✨
+
 ---
 
-## 🛡️ Admin Guide
+## 📖 Usage Guide
 
-The Admin Dashboard is **automatically visible** once you connect with the wallet that deployed the contract. Here's how:
+### Admin Dashboard
 
-### Connecting as Admin
+#### Connecting as Admin
 
 1. Open **MetaMask** in your browser.
-2. Click the account icon → **Import Account**.
-3. Paste the same private key you used in your `.env` file.
-4. Switch MetaMask to the **Localhost 7545** network:
-   - Network Name: `Ganache`
-   - RPC URL: `http://127.0.0.1:7545`
-   - Chain ID: `1337`
-   - Currency Symbol: `ETH`
-5. On the website, click **"Connect MetaMask to Vote"**.
+2. Add a custom network in MetaMask:
+   - **Network Name:** `Hardhat Local`
+   - **RPC URL:** `http://127.0.0.1:8546`
+   - **Chain ID:** `31337`
+   - **Currency Symbol:** `ETH`
+3. Switch to this network in MetaMask.
+4. Import an account using one of the private keys from `npm run node` output.
+5. Visit **http://localhost:5173** and click **"Connect MetaMask"**.
 
-The **Admin Dashboard** panel will appear with a gold **ADMIN PANEL** badge.
+> The wallet that first connects becomes the **Admin**. You'll see the gold **ADMIN PANEL** badge and all admin controls.
 
-### Running an Election
+#### Admin Actions
 
-| Step | Action | Button |
+| Step | Action | Notes |
 |---|---|---|
-| 1 | Type a candidate name and click Add | **Add** |
-| 2 | Repeat for all candidates | **Add** |
-| 3 | When ready, start the election | **Start Election** |
-| 4 | Let voters cast their votes | — |
-| 5 | Close the election | **End Election** |
-| 6 | Winner is announced automatically | — |
-| 7 | Reset for a new round | **🔄 Restart Election** |
+| 1 | **Add Candidates** | Type candidate names one at a time and click **Add**. Repeat as many times as needed. |
+| 2 | **Start Election** | Click **Start Election** to open voting. Voters can now cast ballots. |
+| 3 | **Monitor Votes** | Watch vote counts update in real-time as voters participate. |
+| 4 | **End Election** | Click **End Election** to close voting and calculate the winner. |
+| 5 | **Announce Winner** | The winner is displayed with final vote counts. |
+| 6 | **Restart Election** | Click **🔄 Restart Election** to clear all candidates and start fresh with a new `electionId`. |
 
-> When you restart, all candidate data is cleared and a new `electionId` is assigned. Previous voters can vote again in the new election — their old vote does not carry over.
+> ⚠️ **Important:** When you restart, all previous candidates are cleared and the election ID increments. This prevents voter replay attacks — previous votes cannot be reused.
 
----
+### Voter Workflow
 
-## 🗳️ Voter Guide
-
-1. Visit the website at `http://localhost:5173`
-2. The candidates and election status are **visible immediately** — no wallet needed to view.
-3. To vote, click **"Connect MetaMask to Vote"** and approve the connection.
-4. If the election is Live, a **"Vote"** button will appear next to each candidate.
-5. Click **Vote** next to your preferred candidate and **Confirm** the MetaMask popup.
-6. Your vote is recorded permanently on the blockchain. You cannot vote again in the same election.
+1. Visit **http://localhost:5173** — no wallet needed to see candidates and vote counts.
+2. When the election is **Live**, connect MetaMask by clicking **"Connect MetaMask to Vote"**.
+3. The **Vote** button appears next to each candidate.
+4. Click **Vote** next to your preferred candidate.
+5. Approve the MetaMask popup — this signs the blockchain transaction.
+6. Your vote is recorded permanently. You cannot vote again in the same election.
+7. After the election ends, you'll see the final results and winner.
 
 ---
 
 ## 📄 Smart Contract Reference
 
-**Contract:** `Voting.sol`
+**Contract:** `Voting.sol` (Solidity 0.8.28)
+
+### Key Concepts
+
+- **Admin:** The address that deploys the contract. Only admins can manage the election lifecycle.
+- **Election ID:** Increments each time the election restarts. Prevents voter replay attacks.
+- **Candidates:** Stored in an array. Each has a name and vote count.
+- **Voters:** Tracked by `voters[electionId][address]`. Set to `true` when they vote.
 
 ### State Variables
 
 | Variable | Type | Description |
 |---|---|---|
-| `admin` | `address` | Address of the election administrator |
-| `electionStarted` | `bool` | Whether the election is currently running |
-| `electionEnded` | `bool` | Whether the election has concluded |
-| `electionId` | `uint` | Increments on each restart to invalidate old votes |
-| `candidates` | `Candidate[]` | Array of registered candidates |
-| `voters` | `mapping(uint => mapping(address => bool))` | Vote records per election per voter |
+| `admin` | `address` | Address of the election administrator (immutable) |
+| `electionStarted` | `bool` | Whether voting is currently allowed |
+| `electionEnded` | `bool` | Whether voting has been closed |
+| `electionId` | `uint` | Current election session ID (increments on restart) |
+| `candidates` | `Candidate[]` | Dynamic array of registered candidates |
+| `voters` | `mapping(uint => mapping(address => bool))` | Tracks who voted per election per address |
 
-### Functions
+### Public Functions
 
-| Function | Access | Description |
-|---|---|---|
-| `addCandidate(string name)` | Admin only | Add a candidate before election starts |
-| `startElection()` | Admin only | Open voting |
-| `endElection()` | Admin only | Close voting |
-| `restartElection()` | Admin only | Reset state and increment `electionId` |
-| `vote(uint index)` | Any voter | Cast a vote for a candidate |
-| `getCandidates()` | Public | Returns the full candidates array |
-| `getWinner()` | Public | Returns winner name and vote count (after election ends) |
+| Function | Access | Input | Output | Description |
+|---|---|---|---|---|
+| `addCandidate` | Admin | `string name` | — | Register a new candidate (only before election starts) |
+| `startElection` | Admin | — | — | Open voting (candidates locked) |
+| `endElection` | Admin | — | — | Close voting and calculate winner |
+| `restartElection` | Admin | — | — | Clear candidates and increment `electionId` |
+| `vote` | Any | `uint candidateIndex` | — | Cast a vote (once per wallet per election) |
+| `getCandidates` | Public | — | `Candidate[]` | Returns all candidates with current vote counts |
+| `getWinner` | Public | — | `(name, votes)` | Returns winner info (valid after election ends) |
 
-### Security Design
+### Security Features
 
-- **`onlyAdmin` modifier** — all sensitive functions revert if called by non-admin.
-- **Double-vote protection** — `voters[electionId][msg.sender]` ensures one vote per wallet per election round.
-- **State guards** — functions check `electionStarted` and `electionEnded` before execution to prevent invalid state transitions.
+- **`onlyAdmin` modifier:** Restricts sensitive functions to the admin wallet.
+- **Double-vote prevention:** The mapping `voters[electionId][address]` ensures each wallet votes once per election.
+- **State validation:** Functions check election state before execution:
+  - `addCandidate` only works when `!electionStarted && !electionEnded`
+  - `vote` only works when `electionStarted && !electionEnded`
+  - `getWinner` only returns valid data when `electionEnded`
+- **Immutable admin:** The admin address cannot be changed after deployment.
+
+### Example Contract Interaction (Ethers.js)
+
+```javascript
+import { Contract, ethers } from 'ethers';
+import votingABI from './ABI.json';
+
+const provider = new ethers.BrowserProvider(window.ethereum);
+const signer = provider.getSigner();
+const votingContract = new Contract(contractAddress, votingABI, signer);
+
+// Admin: Add a candidate
+await votingContract.addCandidate('Alice');
+
+// Admin: Start voting
+await votingContract.startElection();
+
+// Voter: Cast a vote for candidate at index 0
+await votingContract.vote(0);
+
+// Anyone: Get current candidates
+const candidates = await votingContract.getCandidates();
+console.log(candidates);
+// Output: [ { name: 'Alice', voteCount: BigNumber(1) }, ... ]
+
+// Anyone: Get winner (after election ends)
+const [winnerName, winnerVotes] = await votingContract.getWinner();
+console.log(`${winnerName} won with ${winnerVotes} votes`);
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### "Cannot connect to http://127.0.0.1:8546"
+**Problem:** The frontend can't reach the local blockchain.
+**Solution:**
+- Make sure `npm run node` is still running in a terminal
+- Check that you haven't changed the port from `8546` in `hardhat.config.js`
+- Try refreshing the browser page
+
+### "MetaMask is not connected"
+**Problem:** The website can't find your MetaMask wallet.
+**Solution:**
+- Install the MetaMask browser extension
+- Make sure MetaMask is not locked (click the icon and log in if needed)
+- Try clicking **"Connect MetaMask to Vote"** again
+- Check that you're on the correct custom network (Chain ID: 31337)
+
+### "Transaction failed" or "Not an admin"
+**Problem:** You're trying to use admin functions but aren't connected as admin.
+**Solution:**
+- Make sure you're using the wallet that deployed the contract
+- Import the correct private key into MetaMask from the `npm run node` output
+- Switch to the Hardhat Local network in MetaMask
+
+### "Account already voted in this election"
+**Problem:** You've already cast a vote and tried to vote again.
+**Solution:**
+- Each wallet can vote once per election
+- Wait for the admin to restart the election, then you can vote again
+
+### "Cannot add candidate — election already started"
+**Problem:** Tried to add a candidate after the election started.
+**Solution:**
+- Candidates must be added before **Start Election** is clicked
+- If you need to add more candidates, restart the election (this clears candidates and bumps the election ID)
+
+### Contract deployment fails with "ECONNREFUSED"
+**Problem:** Deploy script can't connect to the blockchain.
+**Solution:**
+- Run `npm run node` first and let it start completely
+- Wait a moment for the node to be ready
+- Then run `npm run deploy` in a new terminal
+
+### Port 5173 already in use
+**Problem:** Another application is using the frontend port.
+**Solution:**
+```bash
+# Kill the process using port 5173
+# On Windows:
+netstat -ano | findstr :5173
+taskkill /PID <PID> /F
+
+# Or just specify a different port:
+cd frontend && npx vite --port 3000
+```
+
+### Port 8546 already in use
+**Problem:** Another process is using the blockchain port.
+**Solution:**
+```bash
+# Specify a different port in hardhat.config.js:
+npx hardhat node --port 8547
+
+# Then update .env or deployment script accordingly
+```
+
+---
+
+## 📸 Screenshots
+
+> **Screenshots coming soon!** Features include:
+> - Admin Dashboard with candidate management
+> - Live voting interface
+> - Election results and winner announcement
+> - Responsive mobile view
+> - MetaMask integration flow
 
 ---
 
 ## 🤝 Contributing
 
-Contributions, ideas, and improvements are welcome!
+Contributions, ideas, and improvements are welcome! Whether you're fixing bugs, adding features, or improving documentation, we'd love to have you involved.
 
-1. Fork the repository
-2. Create a new branch: `git checkout -b feature/your-feature-name`
-3. Make your changes and commit: `git commit -m 'feat: add your feature'`
-4. Push to your branch: `git push origin feature/your-feature-name`
-5. Open a Pull Request
+### How to Contribute
+
+1. **Fork** the repository
+2. **Create** a new branch for your feature:
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+3. **Commit** your changes with clear messages:
+   ```bash
+   git commit -m 'feat: add your feature description'
+   ```
+4. **Push** to your branch:
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+5. **Open** a Pull Request describing your changes
+
+### Contribution Ideas
+
+- 🐛 Bug fixes and code optimizations
+- ✨ UI/UX improvements
+- 📚 Documentation and tutorials
+- ♿ Accessibility improvements
+- 🌍 Internationalization (multiple languages)
+- 📊 Gas optimization for smart contracts
+- ✅ Additional test cases
 
 ---
 
@@ -347,12 +538,24 @@ Contributions, ideas, and improvements are welcome!
 **Anurag Kumar Bharti**
 
 - GitHub: [@Anuragkumarbharti](https://github.com/Anuragkumarbharti)
+- Project Repository: [Decentralized-Voting-System](https://github.com/Anuragkumarbharti/Decentralized-Voting-System)
+
+Feel free to reach out with questions, suggestions, or feedback!
 
 ---
 
 ## 📜 License
 
-This project is licensed under the **MIT License** — free to use, modify, and distribute.
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+You are free to:
+- ✅ Use this code for personal or commercial projects
+- ✅ Modify and distribute
+- ✅ Include in closed-source applications
+
+You must:
+- ℹ️ Include a copy of the license
+- ℹ️ Provide attribution to the original author
 
 ---
 
